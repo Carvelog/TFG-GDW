@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import {Dropzone} from "../../components/Dropzone/Dropzone";
 
 const Div = styled.div`
-  height: auto;
+  height: 90vh;
 `
 
 const Container = styled.div`
@@ -16,6 +16,7 @@ const Title = styled.h1`
   display: flex;
   justify-content: center;
   font-size: 40px;
+  text-align: center;
 `
 
 const Text = styled.p`
@@ -23,7 +24,7 @@ const Text = styled.p`
   justify-content: center;
   font-size: 25px;
   text-align: center;
-  padding: 100px;
+  padding: 60px;
 `
 
 export const LandingPage = () => {
