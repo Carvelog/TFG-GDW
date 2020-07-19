@@ -30,7 +30,7 @@ const Text = styled.p`
 export const LandingPage = () => {
   return (
     <Div>
-      <Title>Upload your retinal image to process it and find out the diagnosis</Title>
+      <Title>Upload your retinal image to process it and get the diagnosis</Title>
       <Text>By submitting data below, you are agreeing to our Terms of service and Privacy policy.
       The ULL and this project are not responsible for the contents of your submission.
       Learn more.</Text>
