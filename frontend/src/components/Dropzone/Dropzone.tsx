@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react'
 import styled from "@emotion/styled";
 import axios from 'axios'
 import Button from "../buttons/Button";
+import imageIcon from '../../assets/gallery.png'
+import dropzoneIcon from '../../assets/dragAndDrop.png'
 
 // import { useForm } from 'react-hook-form'
 // export const Dropzone = () => {
@@ -56,13 +58,15 @@ const Div = styled.div`
 
 const Container = styled.div`
   width: 65%;
-  height: 150px;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 50px;
 `
 
 const Img = styled.img`
+  margin: 0;
   pointer-events: none;
 `
 
@@ -72,7 +76,7 @@ const P = styled.p`
 
 export const Dropzone = () => {
 
-  const [ imageData, setImageData ] = useState(null)
+  const [ imageUpload, setImageUpload ] = useState(null)
 
   const hiddenInputFile = useRef(null);
   const dropzoneDiv = useRef(null)
@@ -106,14 +110,13 @@ export const Dropzone = () => {
 
     if (e.dataTransfer !== undefined) {
       const files = e.dataTransfer.files;
-      setImageData(files)
-
+      setImageUpload(files)
       // Pass event to removeDragData for cleanup
       e.dataTransfer.clearData();
     }
     else {
       const files = e.target.files
-      setImageData(files)
+      setImageUpload(files)
     }
 
     // for (let i = 0; i < files.length; i++) {
@@ -123,8 +126,8 @@ export const Dropzone = () => {
   }
 
   const handleUpload = () => {
-    if(imageData !== undefined)
-      console.log(imageData)
+    if(imageUpload !== undefined)
+      console.log(imageUpload)
       // axios
     else
       console.log('no file uploaded');
@@ -137,15 +140,26 @@ export const Dropzone = () => {
 
   }
 
+  const handleDelete = (e: any) => {
+    setImageUpload(null)
+  }
+
   return (
     <Container>
-
       <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop} onDragOver={onDragOver} onClick={handleOnClick}>
-        {/*<Img src="" alt="Lamp" width="100" height="100"/>*/}
+        {imageUpload ?
+          // <Img src="https://leanmind.es/images/min/docker.png" alt="" width="100" height="100"/>
+            <div>
+              <Img src={imageIcon} alt="" width="100" height="100"/>
+              <Button value='x' onClick={handleDelete} type='round'>Delete</Button>
+            </div>
+          :
+            <Img src={dropzoneIcon} alt="" width="100" height="100"/>
+        }
         <P>drag and drop</P>
       </Div>
       <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
-      <Button value="Upload" onClick={handleUpload}/>
+      <Button value="Upload" onClick={handleUpload} type='square'/>
     </Container>
   )
 }

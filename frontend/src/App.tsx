@@ -5,8 +5,6 @@ import { Footer } from "./components/Footer/Footer";
 import styled from "@emotion/styled";
 
 const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
 `
 
 const App = () => {

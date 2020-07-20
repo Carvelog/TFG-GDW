@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import {Dropzone} from "../../components/Dropzone/Dropzone";
 
 const Div = styled.div`
-  height: 90vh;
+  min-height: 80vh;
 `
 
 const Container = styled.div`

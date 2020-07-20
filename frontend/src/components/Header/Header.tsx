@@ -29,7 +29,7 @@ export const Header = () => {
 
   return <Container>
     <Img src={logo} alt="Ull logo" />
-    <Button value="Guide" onClick={handleClick}/>
-    <Button value="About" onClick={handleClick}/>
+    <Button value="Guide" onClick={handleClick} type='square'/>
+    <Button value="About" onClick={handleClick} type='square'/>
   </Container>
 }
