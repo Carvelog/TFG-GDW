@@ -111,7 +111,7 @@ export const Dropzone = () => {
     if (e.dataTransfer !== undefined) {
       const files = e.dataTransfer.files;
       setImageUpload(files)
-      // Pass event to removeDragData for cleanup
+
       e.dataTransfer.clearData();
     }
     else {
@@ -137,7 +137,6 @@ export const Dropzone = () => {
   const handleOnClick = (e: any) => {
     // @ts-ignore
     hiddenInputFile.current.click();
-
   }
 
   const handleDelete = (e: any) => {
@@ -148,7 +147,6 @@ export const Dropzone = () => {
     <Container>
       <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop} onDragOver={onDragOver} onClick={handleOnClick}>
         {imageUpload ?
-          // <Img src="https://leanmind.es/images/min/docker.png" alt="" width="100" height="100"/>
             <div>
               <Img src={imageIcon} alt="" width="100" height="100"/>
               <Button value='x' onClick={handleDelete} type='round'>Delete</Button>
