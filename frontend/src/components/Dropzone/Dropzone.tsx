@@ -1,9 +1,12 @@
+import 'react-image-crop/dist/ReactCrop.css';
 import React, { useRef, useState } from 'react'
 import styled from "@emotion/styled";
 import axios from 'axios'
 import Button from "../buttons/Button";
 import imageIcon from '../../assets/gallery.png'
+
 import dropzoneIcon from '../../assets/dragAndDrop.png'
+import ReactCrop from 'react-image-crop';
 
 // import { useForm } from 'react-hook-form'
 // export const Dropzone = () => {
@@ -76,7 +79,9 @@ const P = styled.p`
 
 export const Dropzone = () => {
 
-  const [ imageUpload, setImageUpload ] = useState(null)
+  const [ imageUpload, setImageUpload ] = useState()
+  const [ isCroped, setIsCroped ] = useState(false)
+  const [ crop, setCrop ] = useState({aspect: 1});
 
   const hiddenInputFile = useRef(null);
   const dropzoneDiv = useRef(null)
@@ -109,14 +114,25 @@ export const Dropzone = () => {
     e.preventDefault();
 
     if (e.dataTransfer !== undefined) {
-      const files = e.dataTransfer.files;
-      setImageUpload(files)
+      const file = e.dataTransfer.files[0];
 
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        setImageUpload(reader.result);
+      }
+
+      reader.readAsDataURL(file);
       e.dataTransfer.clearData();
     }
     else {
-      const files = e.target.files
-      setImageUpload(files)
+      const file = e.target.files?.[0]
+
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        setImageUpload(reader.result);
+      }
+
+      reader.readAsDataURL(file);
     }
 
     // for (let i = 0; i < files.length; i++) {
@@ -143,21 +159,53 @@ export const Dropzone = () => {
     setImageUpload(null)
   }
 
-  return (
-    <Container>
+  const handleCropOnChange = (newCrop: any) => {
+    setCrop(newCrop)
+  }
+
+  const saveCrop = () => {
+    setImageUpload(crop)
+    setIsCroped(true)
+  }
+
+  if(imageUpload && isCroped){
+    return <Container>
       <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop} onDragOver={onDragOver} onClick={handleOnClick}>
-        {imageUpload ?
-            <div>
-              <Img src={imageIcon} alt="" width="100" height="100"/>
-              <Button value='x' onClick={handleDelete} type='round'>Delete</Button>
-            </div>
-          :
-            <Img src={dropzoneIcon} alt="" width="100" height="100"/>
-        }
-        <P>drag and drop</P>
+        <div>
+          <Img src={imageIcon} alt="" width="100" height="100"/>
+          <Button onClick={handleDelete} type='round'>Delete</Button>
+        </div>
+        <P>Uploaded file</P>
       </Div>
       <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
       <Button value="Upload" onClick={handleUpload} type='square'/>
     </Container>
-  )
+  } else {
+    if (imageUpload) {
+      return <Container>
+        <ReactCrop src={imageUpload} crop={crop} onChange={handleCropOnChange}/>
+        <Button value="Accept" onClick={saveCrop} type='square'/>
+      </Container>
+    } else {
+      return <Container>
+        <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop}
+             onDragOver={onDragOver} onClick={handleOnClick}>
+          <Img src={dropzoneIcon} alt="" width="100" height="100"/>
+          <P>drag and drop</P>
+        </Div>
+        <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
+        <Button value="Upload" onClick={handleUpload} type='square'/>
+      </Container>
+    }
+  }
+
+  // return <Container>
+  //   <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop}
+  //        onDragOver={onDragOver} onClick={handleOnClick}>
+  //     <Img src={dropzoneIcon} alt="" width="100" height="100"/>
+  //     <P>drag and drop</P>
+  //   </Div>
+  //   <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
+  //   <Button value="Upload" onClick={handleUpload} type='square'/>
+  // </Container>
 }
