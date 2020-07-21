@@ -8,43 +8,6 @@ import imageIcon from '../../assets/gallery.png'
 import dropzoneIcon from '../../assets/dragAndDrop.png'
 import ReactCrop from 'react-image-crop';
 
-// import { useForm } from 'react-hook-form'
-// export const Dropzone = () => {
-//   const { register, handleSubmit } = useForm()
-//
-//   const onSubmit = (data: any)=> {
-//
-//     console.log(data.image?.[0])
-//
-//     const imageData = new FormData();
-//     imageData.append("image", data.image?.[0]);
-//
-//     axios({
-//       method: 'post',
-//       url: 'http://localhost:5000/api/upload',
-//       data: imageData,
-//       headers: {
-//         'Content-Type': 'multipart/form-data'
-//       }
-//     })
-//       .then(res => {
-//         console.log('res: ', res);
-//       })
-//       .catch(err => {
-//         console.log('err: ', err);
-//       })
-//   }
-//
-//   return (
-//     <div>
-//       <form method="post" encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)}>
-//         <input ref={register} type="file" name="image"/>
-//         <input ref={register} type="submit" value="Upload"/>
-//       </form>
-//     </div>
-//   )
-// };
-
 const Div = styled.div`
   width: 100%;
   height: 200px;
@@ -80,7 +43,8 @@ const P = styled.p`
 export const Dropzone = () => {
 
   const [ imageUpload, setImageUpload ] = useState()
-  const [ isCroped, setIsCroped ] = useState(false)
+
+  const [ isCropped, setIsCropped ] = useState(false)
   const [ crop, setCrop ] = useState({aspect: 1});
 
   const hiddenInputFile = useRef(null);
@@ -106,7 +70,6 @@ export const Dropzone = () => {
   }
 
   const onDrop = (e: any) => {
-    console.log('File(s) dropped');
     // @ts-ignore
     dropzoneDiv.current.style.backgroundColor = '#b881dd';
 
@@ -134,20 +97,34 @@ export const Dropzone = () => {
 
       reader.readAsDataURL(file);
     }
-
-    // for (let i = 0; i < files.length; i++) {
-    //   console.log("Type: " + files[i].type);
-    // }
-
   }
 
   const handleUpload = () => {
-    if(imageUpload !== undefined)
+    if(imageUpload !== undefined) {
       console.log(imageUpload)
-      // axios
-    else
+//     const imageData = new FormData();
+//     imageData.append("image", data.image?.[0]);
+//
+//     axios({
+//       method: 'post',
+//       url: 'http://localhost:5000/api/upload',
+//       data: imageData,
+//       headers: {
+//         'Content-Type': 'multipart/form-data'
+//       }
+//     })
+//       .then(res => {
+//         console.log('res: ', res);
+//       })
+//       .catch(err => {
+//         console.log('err: ', err);
+//       })
+//   }
+    }
+    else{
       console.log('no file uploaded');
-    //mensaje de error
+      // mensaje de error
+    }
   }
 
   const handleOnClick = (e: any) => {
@@ -164,48 +141,54 @@ export const Dropzone = () => {
   }
 
   const saveCrop = () => {
-    setImageUpload(crop)
-    setIsCroped(true)
+    console.log(crop)
+    console.log(imageUpload)
+    setIsCropped(true);
   }
 
-  if(imageUpload && isCroped){
-    return <Container>
-      <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop} onDragOver={onDragOver} onClick={handleOnClick}>
-        <div>
-          <Img src={imageIcon} alt="" width="100" height="100"/>
-          <Button onClick={handleDelete} type='round'>Delete</Button>
-        </div>
-        <P>Uploaded file</P>
-      </Div>
-      <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
-      <Button value="Upload" onClick={handleUpload} type='square'/>
-    </Container>
-  } else {
-    if (imageUpload) {
-      return <Container>
-        <ReactCrop src={imageUpload} crop={crop} onChange={handleCropOnChange}/>
-        <Button value="Accept" onClick={saveCrop} type='square'/>
-      </Container>
-    } else {
-      return <Container>
-        <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop}
-             onDragOver={onDragOver} onClick={handleOnClick}>
-          <Img src={dropzoneIcon} alt="" width="100" height="100"/>
-          <P>drag and drop</P>
+  return <Container>
+    {imageUpload ?
+      <>
+        {isCropped ?
+          <>
+            <Div ref={dropzoneDiv}
+                 onDragEnter={onDragEnter}
+                 onDragLeave={onDragLeave}
+                 onDragOver={onDragOver}
+                 onClick={handleOnClick}
+                 onDrop={onDrop}
+            >
+              <div>
+                <Img src={imageIcon} alt="" width="100" height="100"/>
+                <Button onClick={handleDelete} type='round'>Delete</Button>
+              </div>
+              <P>Uploaded file</P>
+              <Button value="Upload" onClick={handleUpload} type='square'/>
+            </Div>
+          </>
+          :
+          <div>
+            <ReactCrop src={imageUpload} crop={crop} onChange={handleCropOnChange}/>
+            <Button value="Accept" onClick={saveCrop} type='square'/>
+          </div>
+        }
+      </>
+      :
+      <>
+        <Div ref={dropzoneDiv}
+             onDragEnter={onDragEnter}
+             onDragLeave={onDragLeave}
+             onDragOver={onDragOver}
+             onClick={handleOnClick}
+             onDrop={onDrop}
+        >
+          <div>
+            <Img src={dropzoneIcon} alt="" width="100" height="100"/>
+            <P>drag and drop</P>
+          </div>
         </Div>
         <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
-        <Button value="Upload" onClick={handleUpload} type='square'/>
-      </Container>
+      </>
     }
-  }
-
-  // return <Container>
-  //   <Div ref={dropzoneDiv} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop}
-  //        onDragOver={onDragOver} onClick={handleOnClick}>
-  //     <Img src={dropzoneIcon} alt="" width="100" height="100"/>
-  //     <P>drag and drop</P>
-  //   </Div>
-  //   <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
-  //   <Button value="Upload" onClick={handleUpload} type='square'/>
-  // </Container>
+  </Container>
 }
