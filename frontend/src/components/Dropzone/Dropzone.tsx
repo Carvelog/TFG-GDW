@@ -17,9 +17,14 @@ const Div = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: #b881dd;
+  background: #b881dd; /*//#72bbab*/
   outline: none;
   margin-bottom: 15px;
+  cursor: pointer;
+
+  &:hover{
+    background: #8d1adb;
+  }
 `
 
 const Container = styled.div`
@@ -52,7 +57,6 @@ export const Dropzone = () => {
 
   const onDragEnter = (e: any) => {
     e.preventDefault()
-    console.log('enter');
     // @ts-ignore
     dropzoneDiv.current.style.backgroundColor = '#8d1adb';
 
@@ -60,7 +64,6 @@ export const Dropzone = () => {
 
   const onDragLeave = (e: any) => {
     e.preventDefault()
-    console.log('leave');
     // @ts-ignore
     dropzoneDiv.current.style.backgroundColor = '#b881dd';
   }
@@ -134,6 +137,7 @@ export const Dropzone = () => {
 
   const handleDelete = (e: any) => {
     setImageUpload(null)
+    setIsCropped(false)
   }
 
   const handleCropOnChange = (newCrop: any) => {
@@ -143,6 +147,9 @@ export const Dropzone = () => {
   const saveCrop = () => {
     console.log(crop)
     console.log(imageUpload)
+    const dropZoneContainerSize = document.getElementById("cropzone");
+    console.log('w ',dropZoneContainerSize?.clientWidth)
+    console.log('h ',dropZoneContainerSize?.clientHeight)
     setIsCropped(true);
   }
 
@@ -168,7 +175,9 @@ export const Dropzone = () => {
           </>
           :
           <div>
-            <ReactCrop src={imageUpload} crop={crop} onChange={handleCropOnChange}/>
+            <div id="cropzone">
+              <ReactCrop src={imageUpload} crop={crop} onChange={handleCropOnChange}/>
+            </div>
             <Button value="Accept" onClick={saveCrop} type='square'/>
           </div>
         }
@@ -182,10 +191,8 @@ export const Dropzone = () => {
              onClick={handleOnClick}
              onDrop={onDrop}
         >
-          <div>
-            <Img src={dropzoneIcon} alt="" width="100" height="100"/>
-            <P>drag and drop</P>
-          </div>
+          <Img src={dropzoneIcon} alt="" width="100" height="100"/>
+          <P>drag and drop</P>
         </Div>
         <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
       </>
