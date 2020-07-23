@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 from controllers.controllers import ok, uploadImage, getDiagnosis
 from config import Config, DevelopmentConfig
@@ -15,6 +16,7 @@ app.config['MONGODB_SETTINGS'] = {
 
 initializeDb(app)
 api = Api(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 api.add_resource(ok, '/api/ok')
 api.add_resource(uploadImage, '/api/upload')

@@ -4,11 +4,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+flask-cors = "==3.0.8"
 
 [packages]
 flask = "==1.1.2"
 flask-mongoengine = "==0.9.5"
 flask-restful = "==0.3.8"
+opencv-python = "==4.3.0.36"
 
 [requires]
 python_version = "3.6"

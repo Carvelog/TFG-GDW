@@ -1,4 +1,5 @@
 import os, random, string, json, errno
+
 from flask_restful import Resource
 from flask import request, redirect, jsonify, Response
 from werkzeug.utils import secure_filename
@@ -15,6 +16,10 @@ class uploadImage(Resource):
     methods=['POST']
 
     if request.method == 'POST':
+
+      # if 'image' not in request.files:
+      #   return redirect(request.url), 400 # y devuelve un status 400
+
       image = request.files['image']
 
       if not os.path.exists(Config.UPLOAD_FOLDER):
@@ -23,9 +28,6 @@ class uploadImage(Resource):
         except OSError as e:
           if e.errno != errno.EEXIST:
             raise
-
-      if 'image' not in request.files:
-        return redirect(request.url), 400 # y devuelve un status 400
 
       if image and allowedFileExtension(image.filename):
         image.filename = uuid(image.filename)
