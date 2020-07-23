@@ -20,12 +20,23 @@ def uuid(filename=None):
   else:
     return generateRandomString()
 
-def processData():
+def decodeB64Image(image):
+  return  base64.b64decode(image[image.find(',') + 5:])
+
+def cropImage(data):
+
+  x = data['cropData']['x']
+  y = data['cropData']['y']
+  crop_width = int(data['cropData']['width'])
+  crop_height = int(data['cropData']['height'])
+  width = data['imageWidth']
+  height = data['imageHeight']
+  # base64Image = data['b64Image'][data['b64Image'].find(',') + 5:]
+  base64Image = decodeB64Image(data['b64Image'])
 
   dim = (width, height)
 
-  im_bytes = base64.b64decode(base64Image)
-  im_arr = np.frombuffer(im_bytes, dtype=np.uint8)
+  im_arr = np.frombuffer(base64Image, dtype=np.uint8)
   img = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
 
   image_resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
@@ -34,4 +45,4 @@ def processData():
   retval, buffer = cv2.imencode('.jpg', image_cropped)
   b64Image = base64.b64encode(buffer)
 
-  return jsonify(crop = b64Image.decode('utf-8'))
+  return b64Image
