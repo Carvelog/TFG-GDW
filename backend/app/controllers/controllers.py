@@ -11,7 +11,7 @@ class ok(Resource):
   def get(self):
     return "ok!"
 
-class downloadImage(Resource):
+class downloadImage(Resource): #TODO: implementar
   def get(self, uuid):
     methods=['GET']
 
@@ -56,11 +56,11 @@ class uploadImage(Resource):
         with open(os.path.join(app.config['UPLOAD_FOLDER'], filename), "wb") as new_file:
           new_file.write(b64OriginalImage)
 
-        # Image(
-        #   uuid = image_uuid,
-        #   imageName = filename,
-        #   imagePath = os.path.abspath(Config.UPLOAD_FOLDER)
-        # ).save()
+        Image(
+          uuid = image_uuid,
+          imageName = filename,
+          imagePath = os.path.abspath(Config.UPLOAD_FOLDER)
+        ).save()
 
         response = jsonify(
           uuid = image_uuid,
