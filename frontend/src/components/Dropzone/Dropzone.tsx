@@ -45,12 +45,20 @@ const P = styled.p`
   pointer-events: none;
 `
 
+interface ImageData {
+  cropData: object,
+  imageName: string,
+  imageWidth: number,
+  imageHeight: number,
+  b64Image: string
+}
+
 export const Dropzone = () => {
+  const [ imageData, setImageData ] = useState<ImageData>()
+  const [ crop, setCrop ] = useState({aspect: 1});
 
   const [ imageUpload, setImageUpload ] = useState()
-
   const [ isCropped, setIsCropped ] = useState(false)
-  const [ crop, setCrop ] = useState({aspect: 1});
 
   const hiddenInputFile = useRef(null);
   const dropzoneDiv = useRef(null)
@@ -75,8 +83,6 @@ export const Dropzone = () => {
   const onDrop = (e: any) => {
     // @ts-ignore
     dropzoneDiv.current.style.backgroundColor = '#b881dd';
-
-    // Prevent default behavior (Prevent file from being opened)
     e.preventDefault();
 
     if (e.dataTransfer !== undefined) {
@@ -85,6 +91,10 @@ export const Dropzone = () => {
       const reader = new FileReader();
       reader.onloadend = function () {
         setImageUpload(reader.result);
+        setImageData({
+          imageName: file.name,
+          b64Image: reader.result
+        } as ImageData)
       }
 
       reader.readAsDataURL(file);
@@ -96,6 +106,10 @@ export const Dropzone = () => {
       const reader = new FileReader();
       reader.onloadend = function () {
         setImageUpload(reader.result);
+        setImageData({
+          imageName: file.name,
+          b64Image: reader.result
+        } as ImageData)
       }
 
       reader.readAsDataURL(file);
@@ -103,30 +117,29 @@ export const Dropzone = () => {
   }
 
   const handleUpload = () => {
+    setImageUpload(null)
+    setIsCropped(false)
+
     if(imageUpload !== undefined) {
-      console.log(imageUpload)
-//     const imageData = new FormData();
-//     imageData.append("image", data.image?.[0]);
-//
-//     axios({
-//       method: 'post',
-//       url: 'http://localhost:5000/api/upload',
-//       data: imageData,
-//       headers: {
-//         'Content-Type': 'multipart/form-data'
-//       }
-//     })
-//       .then(res => {
-//         console.log('res: ', res);
-//       })
-//       .catch(err => {
-//         console.log('err: ', err);
-//       })
-//   }
+
+      axios({
+        method: 'post',
+        url: 'http://localhost:5000/api/process',
+        data: imageData,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          console.log('res: ', res);
+        })
+        .catch(err => {
+          console.log('err: ', err);
+        })
     }
     else{
       console.log('no file uploaded');
-      // mensaje de error
+      // mensaje de error, especificar que se requiere una imagen
     }
   }
 
@@ -145,12 +158,15 @@ export const Dropzone = () => {
   }
 
   const saveCrop = () => {
-    console.log(crop)
-    console.log(imageUpload)
     const dropZoneContainerSize = document.getElementById("cropzone");
-    console.log('w ',dropZoneContainerSize?.clientWidth)
-    console.log('h ',dropZoneContainerSize?.clientHeight)
     setIsCropped(true);
+    setImageData({
+      cropData: crop,
+      imageName: imageData?.imageName,
+      imageWidth: dropZoneContainerSize?.clientWidth,
+      imageHeight: dropZoneContainerSize?.clientHeight,
+      b64Image: imageData?.b64Image
+    } as ImageData)
   }
 
   return <Container>
