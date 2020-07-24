@@ -1,7 +1,7 @@
 import os, random, string, json, errno, base64
 
 from flask_restful import Resource
-from flask import request, redirect, jsonify, Response
+from flask import request, redirect, jsonify, Response, send_file
 from werkzeug.utils import secure_filename
 
 from database.models import Image
@@ -19,7 +19,11 @@ class downloadImage(Resource): #TODO: implementar
       image = Image.objects.get(uuid=uuid).to_json()
 
       imageDict = json.loads(image)
+
+      with open(os.path.join(Config.TEMP_FOLDER, newImageName), "wb") as new_file:
+        new_file.write(imageDict['b64Image'])
       
+      # send_file()
       # buscar y devolver la imagen en el filesystem
 
     return {'message':'Invalid method'}, 405

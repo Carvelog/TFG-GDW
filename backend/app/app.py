@@ -9,8 +9,6 @@ from database.db import initializeDb
 app = Flask(__name__)
 
 app.config.from_object(DevelopmentConfig) # change by ProductionConfig
-app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
-app.config['TEMP_FOLDER'] = Config.TEMP_FOLDER
 app.config['MONGODB_SETTINGS'] = {
   'host': Config.MONGO_DATABASE_URI
 } 

@@ -22,7 +22,7 @@ def uuid(filename=None):
   else:
     return generateRandomString()
 
-def decodeB64Image(image):
+def stringToB64(image):
   return  base64.b64decode(image[image.find(','):])
 
 def cropImage(data):
@@ -34,7 +34,7 @@ def cropImage(data):
   width = data['imageWidth']
   height = data['imageHeight']
 
-  base64Image = decodeB64Image(data['b64Image'])
+  base64Image = stringToB64(data['b64Image'])
 
   dim = (width, height)
 
@@ -50,24 +50,14 @@ def cropImage(data):
   return b64Image
 
 def saveImage(image, imageName):
-  if not os.path.exists(Config.UPLOAD_FOLDER):
-    try:
-      os.makedirs(Config.UPLOAD_FOLDER)
-    except OSError as e:
-      if e.errno != errno.EEXIST:
-        raise
-
-  b64OriginalImage = decodeB64Image(image)
+  b64OriginalImage = stringToB64(image)
   newImageName = uuid(imageName)
   image_uuid = uuid()
-
-  with open(os.path.join(Config.UPLOAD_FOLDER, newImageName), "wb") as new_file:
-    new_file.write(b64OriginalImage)
   
   Image(
     uuid = image_uuid,
     imageName = newImageName,
-    imagePath = os.path.abspath(Config.UPLOAD_FOLDER)
+    b64Image = b64OriginalImage
   ).save()
 
   return image_uuid
