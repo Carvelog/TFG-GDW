@@ -183,7 +183,7 @@ export const Dropzone = () => {
             >
               <div>
                 <Img src={imageIcon} alt="" width="100" height="100"/>
-                <Button onClick={handleDelete} type='round'>Delete</Button>
+                <Button onClick={handleDelete} type='close'/>
               </div>
               <P>Uploaded file</P>
               <Button value="Upload" onClick={handleUpload} type='square'/>
