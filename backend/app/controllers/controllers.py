@@ -1,57 +1,58 @@
-import os, random, string, json, errno
+import os, random, string, json, errno, base64
+
 from flask_restful import Resource
-from flask import request, redirect, jsonify, Response
+from flask import request, redirect, jsonify, Response, send_file
 from werkzeug.utils import secure_filename
 
 from database.models import Image
-from .utils import uuid, allowedFileExtension
+from .utils import uuid, allowedFileExtension, cropImage, saveImage, processInCNN
 
 class ok(Resource):
   def get(self):
-    return "ok"
+    return "ok!"
 
-class uploadImage(Resource):
+class downloadImage(Resource): #TODO: implementar
+  def get(self, uuid):
+    methods=['GET']
+
+    if request.method == 'GET':
+      image = Image.objects.get(uuid=uuid).to_json()
+
+      imageDict = json.loads(image)
+
+      with open(os.path.join(Config.TEMP_FOLDER, newImageName), "wb") as new_file:
+        new_file.write(imageDict['b64Image'])
+      
+      # send_file()
+      # buscar y devolver la imagen en el filesystem
+
+    return {'message':'Invalid method'}, 405
+
+class process(Resource):
   def post(self):
     methods=['POST']
 
     if request.method == 'POST':
-      image = request.files['image']
 
-      if not os.path.exists(Config.UPLOAD_FOLDER):
-        try:
-          os.makedirs(Config.UPLOAD_FOLDER)
-        except OSError as e:
-          if e.errno != errno.EEXIST:
-            raise
+      if not request.is_json:
+        return jsonify({"message": "Missing JSON in request"}), 400
 
-      if 'image' not in request.files:
-        return redirect(request.url), 400 # y devuelve un status 400
+      data = request.get_json()
+      imageName = data['imageName']
+    
+      if allowedFileExtension(imageName):
 
-      if image and allowedFileExtension(image.filename):
-        image.filename = uuid(image.filename)
+        image_uuid = saveImage(data['b64Image'], imageName)
 
-        filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        b64CroppedImage = cropImage(data) # need decodify ---> base64.decodebytes(b64CroppedImage)
 
-        image_uuid = uuid()
+        processInCNN(b64CroppedImage, imageName)
 
-        Image(
-          uuid = image_uuid,
-          imageName = image.filename,
-          imagePath = os.path.abspath(Config.UPLOAD_FOLDER)
-        ).save()
-
-        response = jsonify(
-          uuid = image_uuid,
-          imageName = image.filename
-        )
-
-        return response
-
+        return Response(response={image_uuid}, status=200)
+      
       return {'message':'Invalid extension file'}, 406
     
     return {'message':'Invalid method'}, 405
-
 
 class getDiagnosis(Resource):
   def get(self, uuid):
@@ -73,5 +74,4 @@ class getDiagnosis(Resource):
     return {'message':'Invalid method'}, 405
 
 
-from app import app
 from config import Config
