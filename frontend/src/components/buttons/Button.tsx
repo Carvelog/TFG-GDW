@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import styled from "@emotion/styled";
-import close from '../../assets/closeIcon.svg'
+import closeIcon from '../../assets/closeIcon.svg'
+import { square, close, outline } from "./utils";
 
-type buttonTypes = 'square' | 'round'
+type buttonTypes = 'square' | 'close' | 'outline'
 
 interface ButtonProps {
   value?: string;
@@ -16,23 +17,24 @@ const ButtonTheme = styled.button<any>`
   min-width: ${props => props.theme.minWidth};
   height: ${props => props.theme.height};
   font-size: ${props => props.theme.fontSize};
-  color: white;
+  color: #FFFFFF;
   font-family: Arial, serif;
   border-radius: ${props => props.theme.borderRadius};
   background: #5C068C;
-  border: 2px solid white;
+  border: ${props => props.theme.border};
   cursor: pointer;
   outline: none;
   margin: ${props => props.theme.margin};
   padding: 0;
 
   &:hover {
-    background: #3B0458;
-    border: 2px solid #ECECEC;
+    background: ${props => props.theme.hoverBackground};
+    border: ${props => props.theme.hoverBorder};
     color: #ECECEC;
   }
   &:active {
-    border: 3px solid #ECECEC;
+    background: ${props => props.theme.activeBackground};
+    border: ${props => props.theme.activeBorder};
   }
 `
 
@@ -43,35 +45,17 @@ margin-right: auto;
 `
 
 const Button: FC<ButtonProps> = ({value, onClick, type}) => {
-
-  const square = {
-    width: '120px',
-    minWidth: '100px',
-    height: '60px',
-    borderRadius: '6px',
-    fontSize: '25px',
-    margin: '5px 10px'
-  }
-
-  const round = {
-    width: '20px',
-    minWidth: '5px',
-    height: '20px',
-    borderRadius: '50%',
-    fontSize: '15px',
-    margin: '0'
-  }
-
   const handleOnClick = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
     onClick();
   }
 
-  if(type === 'square')
-    return <ButtonTheme theme={square} onClick={handleOnClick}>{value}</ButtonTheme>
-  else
-    return <ButtonTheme theme={round} onClick={handleOnClick}><Img src={close} alt="delete upload" height={8} width={8}/></ButtonTheme>
+  switch (type) {
+    case "square": return <ButtonTheme theme={square} onClick={handleOnClick}>{value}</ButtonTheme>;
+    case "close": return <ButtonTheme theme={close} onClick={handleOnClick}><Img src={closeIcon} alt="delete upload" height={8} width={8}/></ButtonTheme>;
+    case "outline": return <ButtonTheme theme={outline} onClick={handleOnClick}>{value}</ButtonTheme>;
+  }
 }
 
 export default Button;
