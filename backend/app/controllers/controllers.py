@@ -5,7 +5,7 @@ from flask import request, redirect, jsonify, Response
 from werkzeug.utils import secure_filename
 
 from database.models import Image
-from .utils import uuid, allowedFileExtension, cropImage, decodeB64Image
+from .utils import uuid, allowedFileExtension, cropImage, saveImage, processInCNN
 
 class ok(Resource):
   def get(self):
@@ -24,7 +24,7 @@ class downloadImage(Resource): #TODO: implementar
 
     return {'message':'Invalid method'}, 405
 
-class uploadImage(Resource):
+class process(Resource):
   def post(self):
     methods=['POST']
 
@@ -35,39 +35,16 @@ class uploadImage(Resource):
 
       data = request.get_json()
       imageName = data['imageName']
-
+    
       if allowedFileExtension(imageName):
 
-        b64OriginalImage = decodeB64Image(data['b64Image']) # no necesita decodificar los bytes
-        b64CroppedImage = cropImage(data) # necesita decodificar los bytes ---> base64.decodebytes(b64CroppedImage)
+        image_uuid = saveImage(data['b64Image'], imageName)
 
-        filename = uuid(imageName)
-        # filename = secure_filename(imageName)
+        b64CroppedImage = cropImage(data) # need decodify ---> base64.decodebytes(b64CroppedImage)
 
-        image_uuid = uuid()
+        processInCNN(b64CroppedImage, imageName)
 
-        if not os.path.exists(Config.UPLOAD_FOLDER):
-          try:
-            os.makedirs(Config.UPLOAD_FOLDER)
-          except OSError as e:
-            if e.errno != errno.EEXIST:
-              raise
-
-        with open(os.path.join(app.config['UPLOAD_FOLDER'], filename), "wb") as new_file:
-          new_file.write(b64OriginalImage)
-
-        Image(
-          uuid = image_uuid,
-          imageName = filename,
-          imagePath = os.path.abspath(Config.UPLOAD_FOLDER)
-        ).save()
-
-        response = jsonify(
-          uuid = image_uuid,
-          imageName = filename
-        )
-
-        return response
+        return Response(response={image_uuid}, status=200)
       
       return {'message':'Invalid extension file'}, 406
     
@@ -93,5 +70,4 @@ class getDiagnosis(Resource):
     return {'message':'Invalid method'}, 405
 
 
-from app import app
 from config import Config

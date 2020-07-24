@@ -11,6 +11,7 @@ class Config(object):
     TESTING = False
     MONGO_DATABASE_URI = f'mongodb://{MONGO_USER}:{MONGO_USER_PASSWORD}@localhost:{MONGO_PORT}/{MONGO_DATABASE_NAME}?authSource={MONGO_DATABASE_NAME}&authMechanism={MONGO_AUTH_MECHANISM}'
     UPLOAD_FOLDER = os.path.abspath(os.path.join('static', 'media'))
+    TEMP_FOLDER = os.path.abspath(os.path.join('temp'))
 
 class ProductionConfig(Config):
     DEBUG = False
