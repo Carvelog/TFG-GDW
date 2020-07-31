@@ -42,7 +42,7 @@ class process(Resource):
     
       if allowedFileExtension(imageName):
 
-        image_uuid = saveImage(data['b64Image'], imageName)
+        image_uuid = saveImage(data['b64Image'], imageName, data['cropData'])
 
         b64CroppedImage = cropImage(data) # need decodify ---> base64.decodebytes(b64CroppedImage)
 

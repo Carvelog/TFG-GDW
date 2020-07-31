@@ -1,6 +1,14 @@
 import os, random, string, json, errno, base64, cv2
 import numpy as np
 
+from io import BytesIO
+
+from skimage import io
+from skimage.transform import resize
+
+from PIL import Image
+from PIL.Image import fromarray
+
 from database.models import Image
 
 ALLOWED_EXTENSIONS = {'jpg', 'png', 'jpeg'}
@@ -13,12 +21,11 @@ def allowedFileExtension(filename):
 def generateRandomString():
   return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for i in range(UUID_LENGTH))
 
-def uuid(filename=None):
-  if filename:
+def uuid(filenameExt=None):
+  if filenameExt:
     newFileName = generateRandomString()
-    ext = filename.rsplit(".", 1)[1]
 
-    return newFileName + '.' + ext
+    return newFileName + '.' + filenameExt
   else:
     return generateRandomString()
 
@@ -44,20 +51,19 @@ def cropImage(data):
   image_resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
   image_cropped = image_resized[y:(crop_height+y), x:(crop_width+x)]
 
-  retval, buffer = cv2.imencode('.jpg', image_cropped)
+  retval, buffer = cv2.imencode('.png', image_cropped)
   b64Image = base64.b64encode(buffer)
 
   return b64Image
 
-def saveImage(image, imageName):
+def saveImage(image, imageName, cropData):
   b64OriginalImage = stringToB64(image)
-  newImageName = uuid(imageName)
   image_uuid = uuid()
   
   Image(
     uuid = image_uuid,
-    imageName = newImageName,
-    b64Image = b64OriginalImage
+    b64Image = b64OriginalImage,
+    cropData = cropData
   ).save()
 
   return image_uuid
@@ -76,7 +82,7 @@ def processInCNN(b64croppedImage, imageName):
   with open(os.path.join(Config.TEMP_FOLDER, newImageName), "wb") as new_file:
     new_file.write(base64.decodebytes(b64cImage))
 
-  #TODO: guarda la imagen o el nombre en una cola
+  #TODO: guarda la imagen o el nombre en una cola, creada mediante hilos o workers
 
 
 from config import Config
