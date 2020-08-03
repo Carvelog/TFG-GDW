@@ -77,7 +77,7 @@ def processInCNN(b64croppedImage, imageName):
         raise
 
   b64cImage = b64croppedImage
-  newImageName = uuid(imageName)
+  newImageName = uuid('png')
 
   with open(os.path.join(Config.TEMP_FOLDER, newImageName), "wb") as new_file:
     new_file.write(base64.decodebytes(b64cImage))
