@@ -137,7 +137,4 @@ def evaluate(model, path):
 
     predictions = evaluate_network_results(model, results_path, input_size, path, BATCH_SIZE)
 
-    return {'pred': predictions}
-
-
-# init_model()
+    return predictions

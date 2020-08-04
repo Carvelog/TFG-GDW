@@ -8,3 +8,5 @@ class Image(db.Document):
     metadata = db.ListField(db.StringField())
     date = db.DateTimeField(default=datetime.now)
     cropData = db.DictField()
+    resizeWidth = db.IntField()
+    resizeHeight = db.IntField()

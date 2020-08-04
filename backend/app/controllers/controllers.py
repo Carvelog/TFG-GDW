@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from database.models import Image
 from nn.modelQueue import insertInQueue
-from .utils import uuid, allowedFileExtension, cropImage, saveImage, processInCNN
+from .utils import uuid, allowedFileExtension, saveImage, cropImage, saveCrop
 
 class ok(Resource):
   def get(self):
@@ -43,8 +43,8 @@ class process(Resource):
     
       if allowedFileExtension(imageName):
 
-        image_uuid = saveImage(data['b64Image'], imageName, data['cropData'])
-        print('image saved')
+        image_uuid = saveImage(data)
+        
         insertInQueue(image_uuid)
 
         ## devolver el id en un token

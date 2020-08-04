@@ -36,7 +36,5 @@ def simulate(uuid):
   return "OK", 200
 
 if __name__ == '__main__':
-  thread = load_model()
-  thread.start()
+  load_model()
   app.run()
-  thread.join()
