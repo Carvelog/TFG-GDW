@@ -7,6 +7,7 @@ import imageIcon from '../../assets/gallery.png'
 
 import dropzoneIcon from '../../assets/dragAndDrop.png'
 import ReactCrop from 'react-image-crop';
+import { setInterval } from "timers";
 
 const Div = styled.div`
   width: 100%;
@@ -17,13 +18,13 @@ const Div = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: #b881dd; /*//#72bbab*/
+  background: #A6E7DC;
   outline: none;
   margin-bottom: 15px;
   cursor: pointer;
 
   &:hover{
-    background: #8d1adb;
+    background: #8AE7DB;
   }
 `
 
@@ -53,6 +54,13 @@ interface ImageData {
   b64Image: string
 }
 
+const getDiagnosisRequest = (data: string) => {
+  return axios({
+    method: 'get',
+    url: `http://localhost:5000/api/diagnosis/${data}`,
+  });
+}
+
 export const Dropzone = () => {
   const [ imageData, setImageData ] = useState<ImageData>()
   const [ crop, setCrop ] = useState({aspect: 1});
@@ -66,14 +74,14 @@ export const Dropzone = () => {
   const onDragEnter = (e: any) => {
     e.preventDefault()
     // @ts-ignore
-    dropzoneDiv.current.style.backgroundColor = '#8d1adb';
+    dropzoneDiv.current.style.backgroundColor = '#8AE7DB';
 
   }
 
   const onDragLeave = (e: any) => {
     e.preventDefault()
     // @ts-ignore
-    dropzoneDiv.current.style.backgroundColor = '#b881dd';
+    dropzoneDiv.current.style.backgroundColor = '#A6E7DC';
   }
 
   const onDragOver = (e: any) => {
@@ -82,14 +90,14 @@ export const Dropzone = () => {
 
   const onDrop = (e: any) => {
     // @ts-ignore
-    dropzoneDiv.current.style.backgroundColor = '#b881dd';
+    dropzoneDiv.current.style.backgroundColor = '#A6E7DC';
     e.preventDefault();
 
     if (e.dataTransfer !== undefined) {
       const file = e.dataTransfer.files[0];
 
       const reader = new FileReader();
-      reader.onloadend = function () {
+      reader.onloadend = () => {
         setImageUpload(reader.result);
         setImageData({
           imageName: file.name,
@@ -131,7 +139,15 @@ export const Dropzone = () => {
         }
       })
         .then(res => {
-          console.log('res: ', res);
+          const intervalId = setTimeout(() => {
+            getDiagnosisRequest(res.data)
+              .then((res) => {
+                clearInterval(intervalId)
+              })
+              .catch((err) => {
+                clearInterval(intervalId)
+              })
+          }, 1500)
         })
         .catch(err => {
           console.log('err: ', err);
@@ -208,7 +224,7 @@ export const Dropzone = () => {
              onDrop={onDrop}
         >
           <Img src={dropzoneIcon} alt="" width="100" height="100"/>
-          <P>drag and drop</P>
+          <P>Drag and drop</P>
         </Div>
         <input type="file" ref={hiddenInputFile} onChange={onDrop} style={{display:'none'}}/>
       </>
