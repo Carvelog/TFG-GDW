@@ -38,10 +38,10 @@ def cropImage(data):
   y = round(data['cropData']['y'])
   crop_width = int(data['cropData']['width'])
   crop_height = int(data['cropData']['height'])
-  width = data['imageWidth']
-  height = data['imageHeight']
+  width = data['resizeWidth']
+  height = data['resizeHeight']
 
-  base64Image = stringToB64(data['b64Image'])
+  base64Image = base64.b64decode(data['b64Image']['$binary'])
 
   dim = (width, height)
 
@@ -56,33 +56,37 @@ def cropImage(data):
 
   return b64Image
 
-def saveImage(image, imageName, cropData):
-  b64OriginalImage = stringToB64(image)
+def saveImage(data):
+  b64OriginalImage = stringToB64(data['b64Image'])
   image_uuid = uuid()
   
   Image(
     uuid = image_uuid,
     b64Image = b64OriginalImage,
-    cropData = cropData
+    cropData = data['cropData'],
+    resizeWidth = data['imageWidth'],
+    resizeHeight = data['imageHeight']
   ).save()
 
   return image_uuid
 
-def processInCNN(b64croppedImage, imageName):
-  if not os.path.exists(Config.TEMP_FOLDER):
-    try:
-      os.makedirs(Config.TEMP_FOLDER)
-    except OSError as e:
-      if e.errno != errno.EEXIST:
-        raise
+def saveCrop(b64croppedImage):
+  path = os.path.join(Config.TEMP_FOLDER, generateRandomString())
+  image_path = path + '/image/'
+  if not os.path.exists(image_path):
+      try:
+          os.makedirs(image_path)
+      except OSError as e:
+          if e.errno != errno.EEXIST:
+              raise
 
   b64cImage = b64croppedImage
-  newImageName = uuid(imageName)
+  newImageName = uuid('png')
 
-  with open(os.path.join(Config.TEMP_FOLDER, newImageName), "wb") as new_file:
-    new_file.write(base64.decodebytes(b64cImage))
-
-  #TODO: guarda la imagen o el nombre en una cola, creada mediante hilos o workers
+  with open(os.path.join(image_path, newImageName), "wb") as new_file:
+      new_file.write(base64.decodebytes(b64cImage))
+  
+  return path
 
 
 from config import Config

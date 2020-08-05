@@ -5,6 +5,7 @@ from flask_cors import CORS, cross_origin
 from controllers.controllers import ok, process, getDiagnosis
 from config import Config, DevelopmentConfig
 from database.db import initializeDb
+from nn.modelQueue import load_model
 
 app = Flask(__name__)
 
@@ -35,4 +36,5 @@ def simulate(uuid):
   return "OK", 200
 
 if __name__ == '__main__':
+  load_model()
   app.run()

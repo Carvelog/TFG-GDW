@@ -5,6 +5,7 @@ temp
 __pycache__
 .scripts
 public
+*.h5
 
 # dependencies
 /node_modules
