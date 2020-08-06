@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "@emotion/styled";
 import { useHistory, useLocation } from 'react-router-dom'
-import Button from "../../components/buttons/Button";
+import Button from "../../components/Buttons/Button";
 import logo from "../../assets/ULL_logo.svg"
 
 const Container = styled.div`

@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 
 interface ResultPageProps {
-  id: string
+  result: number
 }
 
-const ResultPage: FC<ResultPageProps> = ({id}) => {
-  return <p>ID: {id}</p>
+const ResultPage: FC<ResultPageProps> = ({result}) => {
+  return <p>Result: {result}</p>
 }
 
 export default ResultPage

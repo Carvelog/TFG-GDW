@@ -1,12 +1,9 @@
 import 'react-image-crop/dist/ReactCrop.css';
-import React, { useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import styled from "@emotion/styled";
-import axios from 'axios'
-import Button from "../buttons/Button";
+import Button from "../Buttons/Button";
 import imageIcon from '../../assets/gallery.png'
-
-import { useDispatch } from "react-redux";
-import { saveId } from "../../redux/actions";
+import { ImageData } from "../../pages/Home/Home";
 
 import dropzoneIcon from '../../assets/dragAndDrop.png'
 import ReactCrop from 'react-image-crop';
@@ -48,22 +45,11 @@ const P = styled.p`
   pointer-events: none;
 `
 
-interface ImageData {
-  cropData: object,
-  imageName: string,
-  imageWidth: number,
-  imageHeight: number,
-  b64Image: string
+interface DropzoneProps {
+  onChildUpload: (data: ImageData | undefined) => void
 }
 
-const getDiagnosisRequest = (data: string) => {
-  return axios({
-    method: 'get',
-    url: `http://localhost:5000/api/diagnosis/${data}`,
-  });
-}
-
-export const Dropzone = () => {
+export const Dropzone: FC<DropzoneProps> = ({onChildUpload}) => {
   const [ imageData, setImageData ] = useState<ImageData>()
   const [ crop, setCrop ] = useState({aspect: 1});
 
@@ -72,8 +58,6 @@ export const Dropzone = () => {
 
   const hiddenInputFile = useRef(null);
   const dropzoneDiv = useRef(null)
-
-  const dispatch = useDispatch()
 
   const onDragEnter = (e: any) => {
     e.preventDefault()
@@ -133,34 +117,7 @@ export const Dropzone = () => {
     setIsCropped(false)
 
     if(imageUpload !== undefined) {
-      axios({
-        method: 'post',
-        url: 'http://localhost:5000/api/process',
-        data: imageData,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => {
-          console.log('result: ', res.data)
-          dispatch(saveId(res.data))
-
-          // const intervalId = setTimeout(() => {
-          //   getDiagnosisRequest(res.data)
-          //     .then((res) => {
-          //       clearInterval(intervalId)
-          //       console.log('result: ', res.data.diagnosisResult)
-          //       dispatch(saveId(res.data.diagnosisResult))
-          //     })
-          //     .catch((err) => {
-          //       clearInterval(intervalId)
-          //       console.log('err: ', err)
-          //     })
-          // }, 1500)
-        })
-        .catch(err => {
-          console.log('err: ', err);
-        })
+      onChildUpload(imageData);
     }
     else{
       console.log('no file uploaded');
