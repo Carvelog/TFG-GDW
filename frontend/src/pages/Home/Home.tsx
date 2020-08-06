@@ -27,7 +27,7 @@ const Text = styled.p`
   padding: 60px;
 `
 
-export const LandingPage = () => {
+const Home = () => {
   return (
     <Div>
       <Title>Upload your retinal image to process it and get the diagnosis</Title>
@@ -40,3 +40,5 @@ export const LandingPage = () => {
     </Div>
   )
 }
+
+export default Home

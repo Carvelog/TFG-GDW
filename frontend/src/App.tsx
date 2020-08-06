@@ -1,19 +1,22 @@
 import React from 'react';
-import { Header } from './components/Header/Header'
-import { LandingPage } from "./views/LandingPage/LandingPage";
-import { Footer } from "./components/Footer/Footer";
-import styled from "@emotion/styled";
-
-const Container = styled.div`
-`
+import { Header } from "./containers/Header/Header";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import About from "./pages/About/About";
+import { Footer } from "./containers/Footer/Footer";
+import Guide from "./pages/Guide/Guide";
 
 const App = () => {
   return (
-    <Container>
-      <Header />
-      <LandingPage />
-      <Footer />
-    </Container>
+    <Router>
+      <div>
+        <Header/>
+        <Route exact path='/' component={Home}/>
+        <Route path='/about' component={About}/>
+        <Route path='/guide' component={Guide}/>
+        <Footer/>
+      </div>
+    </Router>
   )
 };
 

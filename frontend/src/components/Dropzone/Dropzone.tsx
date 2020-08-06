@@ -1,5 +1,6 @@
 import 'react-image-crop/dist/ReactCrop.css';
 import React, { useRef, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import styled from "@emotion/styled";
 import axios from 'axios'
 import Button from "../buttons/Button";
@@ -7,7 +8,6 @@ import imageIcon from '../../assets/gallery.png'
 
 import dropzoneIcon from '../../assets/dragAndDrop.png'
 import ReactCrop from 'react-image-crop';
-import { setInterval } from "timers";
 
 const Div = styled.div`
   width: 100%;
@@ -71,6 +71,9 @@ export const Dropzone = () => {
   const hiddenInputFile = useRef(null);
   const dropzoneDiv = useRef(null)
 
+  const currentLocation = useLocation()
+  const history = useHistory()
+
   const onDragEnter = (e: any) => {
     e.preventDefault()
     // @ts-ignore
@@ -129,7 +132,6 @@ export const Dropzone = () => {
     setIsCropped(false)
 
     if(imageUpload !== undefined) {
-
       axios({
         method: 'post',
         url: 'http://localhost:5000/api/process',
@@ -143,6 +145,8 @@ export const Dropzone = () => {
             getDiagnosisRequest(res.data)
               .then((res) => {
                 clearInterval(intervalId)
+                if (currentLocation.pathname !== '/result')
+                  history.push('/result')
               })
               .catch((err) => {
                 clearInterval(intervalId)
