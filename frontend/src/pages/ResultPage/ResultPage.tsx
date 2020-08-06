@@ -1,7 +1,11 @@
-import React from "react";
+import React, { FC } from "react";
 
-const ResultPage = () => {
-  return <p>result</p>
+interface ResultPageProps {
+  id: string
+}
+
+const ResultPage: FC<ResultPageProps> = ({id}) => {
+  return <p>ID: {id}</p>
 }
 
 export default ResultPage

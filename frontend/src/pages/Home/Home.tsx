@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "@emotion/styled";
+
+import { useSelector } from "react-redux";
+
 import {Dropzone} from "../../components/Dropzone/Dropzone";
+import ResultPage from "../ResultPage/ResultPage";
 
 const Div = styled.div`
   min-height: 80vh;
@@ -28,6 +32,8 @@ const Text = styled.p`
 `
 
 const Home = () => {
+  // @ts-ignore
+  const id = useSelector(store => store.id)
   return (
     <Div>
       <Title>Upload your retinal image to process it and get the diagnosis</Title>
@@ -35,7 +41,11 @@ const Home = () => {
       The ULL and this project are not responsible for the contents of your submission.
       Learn more.</Text>
       <Container>
-        <Dropzone />
+        {id?
+          <ResultPage id={id}/>
+          :
+          <Dropzone />
+        }
       </Container>
     </Div>
   )

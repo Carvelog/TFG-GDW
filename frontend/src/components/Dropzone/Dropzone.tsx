@@ -1,10 +1,12 @@
 import 'react-image-crop/dist/ReactCrop.css';
 import React, { useRef, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
 import styled from "@emotion/styled";
 import axios from 'axios'
 import Button from "../buttons/Button";
 import imageIcon from '../../assets/gallery.png'
+
+import { useDispatch } from "react-redux";
+import { saveId } from "../../redux/actions";
 
 import dropzoneIcon from '../../assets/dragAndDrop.png'
 import ReactCrop from 'react-image-crop';
@@ -71,8 +73,7 @@ export const Dropzone = () => {
   const hiddenInputFile = useRef(null);
   const dropzoneDiv = useRef(null)
 
-  const currentLocation = useLocation()
-  const history = useHistory()
+  const dispatch = useDispatch()
 
   const onDragEnter = (e: any) => {
     e.preventDefault()
@@ -141,17 +142,21 @@ export const Dropzone = () => {
         }
       })
         .then(res => {
-          const intervalId = setTimeout(() => {
-            getDiagnosisRequest(res.data)
-              .then((res) => {
-                clearInterval(intervalId)
-                if (currentLocation.pathname !== '/result')
-                  history.push('/result')
-              })
-              .catch((err) => {
-                clearInterval(intervalId)
-              })
-          }, 1500)
+          console.log('result: ', res.data)
+          dispatch(saveId(res.data))
+
+          // const intervalId = setTimeout(() => {
+          //   getDiagnosisRequest(res.data)
+          //     .then((res) => {
+          //       clearInterval(intervalId)
+          //       console.log('result: ', res.data.diagnosisResult)
+          //       dispatch(saveId(res.data.diagnosisResult))
+          //     })
+          //     .catch((err) => {
+          //       clearInterval(intervalId)
+          //       console.log('err: ', err)
+          //     })
+          // }, 1500)
         })
         .catch(err => {
           console.log('err: ', err);
