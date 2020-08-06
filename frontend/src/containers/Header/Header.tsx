@@ -20,7 +20,6 @@ const Img = styled.img`
 `
 
 export const Header = () => {
-
   const currentLocation = useLocation()
   const history = useHistory();
 

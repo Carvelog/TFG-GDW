@@ -5,6 +5,7 @@ import axios from 'axios'
 import {Dropzone} from "../../components/Dropzone/Dropzone";
 import ResultPage from "../ResultPage/ResultPage";
 import Loader from "../../components/Loader/Loader";
+import Button from "../../components/Buttons/Button";
 
 const Div = styled.div`
   min-height: 80vh;
@@ -85,7 +86,12 @@ const Home = () => {
     sendImageRequest(data, setIsLoading, setResult)
   }
 
+  const onClockReset = () => {
+    setData(null)
+  }
+
   console.log('data')
+
   return (
     <Div>
       <Title>Upload your retinal image to process it and get the diagnosis</Title>
@@ -95,7 +101,15 @@ const Home = () => {
       <Container>
         {data?
           <>
-            {isLoading? <Loader/> : <ResultPage result={result}/>}
+            {isLoading?
+              <Loader/>
+              :
+              <div>
+                <ResultPage result={result}/>
+                <Button value="Ok" onClick={onClockReset} type={"square"}/>
+              </div>
+              }
+
           </>
           :
           <Dropzone onChildUpload={handleChildUpload}/>

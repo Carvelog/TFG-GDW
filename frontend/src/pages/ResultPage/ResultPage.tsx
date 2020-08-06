@@ -5,7 +5,9 @@ interface ResultPageProps {
 }
 
 const ResultPage: FC<ResultPageProps> = ({result}) => {
-  return <p>Result: {result}</p>
+  return <div>
+    <p>Result: {result}</p>
+  </div>
 }
 
 export default ResultPage
