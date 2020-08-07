@@ -1,8 +1,8 @@
 import 'react-image-crop/dist/ReactCrop.css';
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react';
 import styled from "@emotion/styled";
 import Button from "../Buttons/Button";
-import imageIcon from '../../assets/gallery.png'
+import imageIcon from '../../assets/gallery.png';
 import { ImageData } from "../../pages/Home/Home";
 
 import dropzoneIcon from '../../assets/dragAndDrop.png'
@@ -43,6 +43,13 @@ const Img = styled.img`
 
 const P = styled.p`
   pointer-events: none;
+`
+
+const CropContainer = styled.div`
+  max-width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 `
 
 interface DropzoneProps {
@@ -172,12 +179,12 @@ export const Dropzone: FC<DropzoneProps> = ({onChildUpload}) => {
             </Div>
           </>
           :
-          <div>
+          <CropContainer>
             <div id="cropzone">
               <ReactCrop src={imageUpload} crop={crop} onChange={handleCropOnChange}/>
             </div>
             <Button value="Accept" onClick={saveCrop} type='square'/>
-          </div>
+          </CropContainer>
         }
       </>
       :

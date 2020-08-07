@@ -5,7 +5,7 @@ import Button from "../../components/Buttons/Button";
 import logo from "../../assets/ULL_logo.svg"
 
 const Container = styled.div`
-  max-height: 100px;
+  max-height: 80px;
   min-height: 50px;
   background: #5C068C;
   display: flex;
@@ -14,9 +14,8 @@ const Container = styled.div`
 `
 
 const Img = styled.img`
-  width: 20%;
-  min-width: 120px;
-  height: auto;
+  width: 15%;
+  min-width: 150px;
 `
 
 export const Header = () => {
