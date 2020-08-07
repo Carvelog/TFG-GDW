@@ -1,13 +1,12 @@
 import 'react-image-crop/dist/ReactCrop.css';
-import React, { useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import styled from "@emotion/styled";
-import axios from 'axios'
-import Button from "../buttons/Button";
+import Button from "../Buttons/Button";
 import imageIcon from '../../assets/gallery.png'
+import { ImageData } from "../../pages/Home/Home";
 
 import dropzoneIcon from '../../assets/dragAndDrop.png'
 import ReactCrop from 'react-image-crop';
-import { setInterval } from "timers";
 
 const Div = styled.div`
   width: 100%;
@@ -46,22 +45,11 @@ const P = styled.p`
   pointer-events: none;
 `
 
-interface ImageData {
-  cropData: object,
-  imageName: string,
-  imageWidth: number,
-  imageHeight: number,
-  b64Image: string
+interface DropzoneProps {
+  onChildUpload: (data: ImageData | undefined) => void
 }
 
-const getDiagnosisRequest = (data: string) => {
-  return axios({
-    method: 'get',
-    url: `http://localhost:5000/api/diagnosis/${data}`,
-  });
-}
-
-export const Dropzone = () => {
+export const Dropzone: FC<DropzoneProps> = ({onChildUpload}) => {
   const [ imageData, setImageData ] = useState<ImageData>()
   const [ crop, setCrop ] = useState({aspect: 1});
 
@@ -129,29 +117,7 @@ export const Dropzone = () => {
     setIsCropped(false)
 
     if(imageUpload !== undefined) {
-
-      axios({
-        method: 'post',
-        url: 'http://localhost:5000/api/process',
-        data: imageData,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => {
-          const intervalId = setTimeout(() => {
-            getDiagnosisRequest(res.data)
-              .then((res) => {
-                clearInterval(intervalId)
-              })
-              .catch((err) => {
-                clearInterval(intervalId)
-              })
-          }, 1500)
-        })
-        .catch(err => {
-          console.log('err: ', err);
-        })
+      onChildUpload(imageData);
     }
     else{
       console.log('no file uploaded');
