@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import axios from 'axios'
 
 import { Dropzone } from "../../components/Dropzone/Dropzone";
-import ResultPage from "../ResultPage/ResultPage";
+import ShowResult from "../../components/ShowResult/ShowResult";
 import Loader from "../../components/Loader/Loader";
 import Button from "../../components/Buttons/Button";
 
@@ -126,7 +126,7 @@ const Home = () => {
               <Loader/>
               :
               <div>
-                <ResultPage result={result} image={image}/>
+                <ShowResult result={result} image={image}/>
                 <Button value="Ok" onClick={onClockReset} type={"square"}/>
               </div>
               }
