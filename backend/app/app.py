@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS, cross_origin
 
-from controllers.controllers import ok, process, getDiagnosis
+from controllers.controllers import ok, process, getDiagnosis, downloadImage
 from config import Config, DevelopmentConfig
 from database.db import initializeDb
 from nn.modelQueue import load_model
@@ -23,17 +23,7 @@ CORS(app)
 api.add_resource(ok, '/api/ok')
 api.add_resource(process, '/api/process')
 api.add_resource(getDiagnosis, '/api/diagnosis/<string:uuid>')
-
-# -----------------------
-# simulated CNN result
-# -----------------------
-from database.models import Image
-import random
-@app.route('/simulatecnn/<uuid>', methods=['POST'])
-def simulate(uuid):
-  Image.objects.get(uuid=uuid).update(diagnosisResult = bool(random.randint(0,1)))
-
-  return "OK", 200
+api.add_resource(downloadImage, '/api/download/<string:uuid>')
 
 if __name__ == '__main__':
   load_model()

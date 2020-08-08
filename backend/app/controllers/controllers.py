@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from database.models import Image
 from nn.modelQueue import insertInQueue
-from .utils import uuid, allowedFileExtension, saveImage, cropImage, saveCrop
+from .utils import uuid, allowedFileExtension, saveImage, cropImage
 
 class ok(Resource):
   def get(self):
@@ -18,14 +18,13 @@ class downloadImage(Resource): #TODO: implementar
 
     if request.method == 'GET':
       image = Image.objects.get(uuid=uuid).to_json()
-
       imageDict = json.loads(image)
 
-      with open(os.path.join(Config.TEMP_FOLDER, newImageName), "wb") as new_file:
-        new_file.write(imageDict['b64Image'])
-      
-      # send_file()
-      # buscar y devolver la imagen en el filesystem
+      croppedImage = cropImage(imageDict)
+
+      return jsonify(
+        image = croppedImage
+      )
 
     return {'message':'Invalid method'}, 405
 
