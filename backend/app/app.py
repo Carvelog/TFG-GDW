@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from controllers.controllers import ok, process, getDiagnosis, downloadImage
 from config import Config, DevelopmentConfig
 from database.db import initializeDb
-from nn.modelQueue import load_model
+from nn.modelQueue import load_model, processImage
 
 app = Flask(__name__)
 

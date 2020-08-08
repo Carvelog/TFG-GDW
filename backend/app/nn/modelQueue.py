@@ -1,7 +1,8 @@
-from threading import Thread
+from threading import Thread, Lock
 from queue import Queue
 from database.models import Image
 import json
+import time
 
 from .nnModel import init_model, evaluate
 from controllers.utils import saveCrop, cropImage
@@ -16,16 +17,17 @@ def load_model():
 
 def processImage():
     global queue
-    while True:
-        id = queue.get()
-        imageData = Image.objects.get(uuid=id).to_json()
-        imageDict = json.loads(imageData)
+    with Lock():
+        while True:
+            id = queue.get()
+            imageData = Image.objects.get(uuid=id).to_json()
+            imageDict = json.loads(imageData)
 
-        croppedImage = cropImage(imageDict)
-        path = saveCrop(croppedImage)
+            croppedImage = cropImage(imageDict)
+            path = saveCrop(croppedImage)
 
-        result = evaluate(model, path)
-        Image.objects.get(uuid=id).update(diagnosisResult = result[0])
+            result = evaluate(model, path)
+            Image.objects.get(uuid=id).update(diagnosisResult = result[0])
 
 def insertInQueue(id):
     global queue
