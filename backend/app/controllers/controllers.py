@@ -1,8 +1,7 @@
 import os, random, string, json, errno, base64, io
-from PIL import Image
 
 from flask_restful import Resource
-from flask import request, redirect, jsonify, Response, send_file, make_response
+from flask import request, redirect, jsonify, Response, send_file
 from werkzeug.utils import secure_filename
 
 from database.models import Image
@@ -23,9 +22,7 @@ class downloadImage(Resource):
 
       croppedImage = cropImage(imageDict)
 
-      return send_file(
-        io.BytesIO(base64.b64decode(croppedImage)),
-        mimetype='image/png')
+      return croppedImage.decode("utf-8") #TODO: return a json response
 
     return {'message':'Invalid method'}, 405
 
