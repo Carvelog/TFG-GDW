@@ -32,18 +32,11 @@ import datetime
 import numpy as np
 from numpy import savetxt
 
-from shutil import copyfile
+from shutil import copyfile, rmtree
 
 import os
 
-# Ubicación del conjunto de test y de los resultados.
-# TEST_SET_PATH = '/home/carlos/Documentos/TFG/neuralNetwork/refuge_crop_test/test400'
-TEST_SET_PATH = '/home/carlos/Documentos/TFG/neuralNetwork/api/temp/sc4owa8eyni/'
-
-#### CAMBIAR AQUÍ: LA RUTA DEL DIRECTORIO DE RESULTADOS
-# BASE_RESULTS = '/home/carlos/Documentos/TFG/neuralNetwork/results'
-WEIGHT_PATH = '/home/carlos/Documentos/TFG/neuralNetwork/api/model_weight'
-
+WEIGHT_PATH = '/home/carlos/Documentos/TFG/ProyectoTFG/backend/app/nn/weights' 
 
 BATCH_SIZE = 32
 INPUT_SIZE_BY_NETWORK = {
@@ -136,5 +129,7 @@ def evaluate(model, path):
     input_size = INPUT_SIZE_BY_NETWORK[network]
 
     predictions = evaluate_network_results(model, results_path, input_size, path, BATCH_SIZE)
+
+    rmtree(path)
 
     return predictions

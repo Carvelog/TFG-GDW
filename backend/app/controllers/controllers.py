@@ -1,4 +1,4 @@
-import os, random, string, json, errno, base64
+import os, random, string, json, errno, base64, io
 
 from flask_restful import Resource
 from flask import request, redirect, jsonify, Response, send_file
@@ -6,26 +6,23 @@ from werkzeug.utils import secure_filename
 
 from database.models import Image
 from nn.modelQueue import insertInQueue
-from .utils import uuid, allowedFileExtension, saveImage, cropImage, saveCrop
+from .utils import uuid, allowedFileExtension, saveImage, cropImage
 
 class ok(Resource):
   def get(self):
     return "ok!"
 
-class downloadImage(Resource): #TODO: implementar
+class downloadImage(Resource):
   def get(self, uuid):
     methods=['GET']
 
     if request.method == 'GET':
       image = Image.objects.get(uuid=uuid).to_json()
-
       imageDict = json.loads(image)
 
-      with open(os.path.join(Config.TEMP_FOLDER, newImageName), "wb") as new_file:
-        new_file.write(imageDict['b64Image'])
-      
-      # send_file()
-      # buscar y devolver la imagen en el filesystem
+      croppedImage = cropImage(imageDict)
+
+      return croppedImage.decode("utf-8") #TODO: return a json response
 
     return {'message':'Invalid method'}, 405
 
