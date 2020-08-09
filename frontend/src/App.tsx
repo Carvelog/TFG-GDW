@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import { Footer } from "./containers/Footer/Footer";
 import Guide from "./pages/Guide/Guide";
+import ShowResult from "./components/ShowResult/ShowResult";
 
 const App = () => {
   return (

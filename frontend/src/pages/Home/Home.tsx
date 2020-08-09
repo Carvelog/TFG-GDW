@@ -108,7 +108,7 @@ const Home = () => {
 
   }
 
-  const onClockReset = () => {
+  const onClickReset = () => {
     setData(null)
     setResult(null)
   }
@@ -126,8 +126,7 @@ const Home = () => {
               <Loader/>
               :
               <div>
-                <ShowResult result={result} image={image}/>
-                <Button value="Ok" onClick={onClockReset} type={"square"}/>
+                <ShowResult result={result} image={image} onClickReset={onClickReset}/>
               </div>
               }
 
