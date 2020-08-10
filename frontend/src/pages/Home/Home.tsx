@@ -7,7 +7,7 @@ import ShowResult from "../../components/ShowResult/ShowResult";
 import Loader from "../../components/Loader/Loader";
 
 const Div = styled.div`
-  min-height: 80vh;
+  min-height: 82vh;
 `
 
 const Container = styled.div`
