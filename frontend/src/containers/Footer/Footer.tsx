@@ -2,16 +2,36 @@ import React from 'react'
 import styled from "@emotion/styled";
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   background: #5C068C;
   display: flex;
+  flex-direction: column;
   bottom: 0;
+  padding-left: 30px;
+`
+
+const P = styled.p`
+  color: #FFFFFF;
+  font-size: 25px;
+  margin-bottom: 0;
+`
+
+const A = styled.a`
+  color: #FFFFFF;
+  font-size: 25px;
+`
+
+const Ul = styled.ul`
+  color: #FFFFFF;
+  font-size: 25px;
 `
 
 export const Footer = () => {
   return <Container>
-    <h1>Footer</h1>
-    <p>Set a link to icons8.com on all pages where you use our content. If you use it on most pages, a link in your footer is fine.</p>
+    <P>Some icons get from:</P>
+    <Ul>
+      <li><A href="https://icons8.com/" target="_blank">icons8.com</A></li>
+    </Ul>
   </Container>
 }
