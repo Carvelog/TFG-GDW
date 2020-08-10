@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import axios from 'axios'
 
-import {Dropzone} from "../../components/Dropzone/Dropzone";
-import ResultPage from "../ResultPage/ResultPage";
+import { Dropzone } from "../../components/Dropzone/Dropzone";
+import ShowResult from "../../components/ShowResult/ShowResult";
 import Loader from "../../components/Loader/Loader";
-import Button from "../../components/Buttons/Button";
 
 const Div = styled.div`
   min-height: 80vh;
@@ -40,15 +39,8 @@ export interface ImageData {
   b64Image: string
 }
 
-const getDiagnosisRequest = (data: string) => {
-  return axios({
-    method: 'get',
-    url: `http://localhost:5000/api/diagnosis/${data}`,
-  });
-}
-
-const sendImageRequest = (imageData: ImageData | undefined, setIsLoading: any, setResult: any) => {
-  axios({
+const sendImageRequest = async (imageData: ImageData | undefined) => {
+  return await axios({
     method: 'post',
     url: 'http://localhost:5000/api/process',
     data: imageData,
@@ -57,40 +49,67 @@ const sendImageRequest = (imageData: ImageData | undefined, setIsLoading: any, s
     }
   })
     .then(res => {
-      const intervalId = setTimeout(() => {
-        getDiagnosisRequest(res.data)
-          .then((res) => {
-            clearInterval(intervalId)
-            setResult(res.data.diagnosisResult)
-            setIsLoading(false)
-          })
-          .catch((err) => {
-            clearInterval(intervalId)
-            console.log('err: ', err)
-          })
-      }, 1500)
+      return res.data
     })
     .catch(err => {
-      console.log('err: ', err);
+      return err
+    })
+}
+
+const getDiagnosisRequest = (imageID: string, setResult: any, setIsLoading: any) => {
+  const intervalId = setInterval(async () => {
+    await axios({
+      method: 'get',
+      url: `http://localhost:5000/api/diagnosis/${imageID}`,
+    })
+      .then((res) => {
+        clearInterval(intervalId)
+        setResult(res.data.diagnosisResult)
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        clearInterval(intervalId)
+        console.log('err: ', err)
+      //  guardar el error en un setError para manejarlo
+      })
+  }, 1500)
+}
+
+const getCropImage = async (imageId: string) => {
+  return await axios({
+    method: 'get',
+    url: `http://localhost:5000/api/download/${imageId}`,
+    headers: { }
+  })
+    .then(res => {
+      return res.data
+    })
+    .catch(err => {
+      return err
     })
 }
 
 const Home = () => {
   const [ data, setData ] = useState()
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
-  const [ result, setResult] = useState()
+  const [ result, setResult ] = useState()
+  const [ image, setImage ] = useState()
 
-  const handleChildUpload = (data: ImageData | undefined) => {
+  const handleChildUpload = async (data: ImageData | undefined) => {
     setData(data)
+
     setIsLoading(true)
-    sendImageRequest(data, setIsLoading, setResult)
+
+    const imageID = await sendImageRequest(data)
+    setImage(await getCropImage(imageID))
+    getDiagnosisRequest(imageID, setResult, setIsLoading)
+
   }
 
-  const onClockReset = () => {
+  const onClickReset = () => {
     setData(null)
+    setResult(null)
   }
-
-  console.log('data')
 
   return (
     <Div>
@@ -105,8 +124,7 @@ const Home = () => {
               <Loader/>
               :
               <div>
-                <ResultPage result={result}/>
-                <Button value="Ok" onClick={onClockReset} type={"square"}/>
+                <ShowResult result={result} image={image} onClickReset={onClickReset}/>
               </div>
               }
 
