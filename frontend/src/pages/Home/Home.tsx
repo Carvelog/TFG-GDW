@@ -5,7 +5,6 @@ import axios from 'axios'
 import { Dropzone } from "../../components/Dropzone/Dropzone";
 import ShowResult from "../../components/ShowResult/ShowResult";
 import Loader from "../../components/Loader/Loader";
-import Button from "../../components/Buttons/Button";
 
 const Div = styled.div`
   min-height: 80vh;
@@ -53,7 +52,6 @@ const sendImageRequest = async (imageData: ImageData | undefined) => {
       return res.data
     })
     .catch(err => {
-      console.log('err: ', err)
       return err
     })
 }

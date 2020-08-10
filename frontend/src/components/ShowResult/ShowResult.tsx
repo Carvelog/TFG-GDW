@@ -8,57 +8,64 @@ interface ResultPageProps {
   onClickReset: () => void
 }
 
-const Container = styled.div`
+const Div = styled.div`
   display: flex;
   justify-content: center;
 `
 
-const Div = styled(Container)`
+const Container = styled(Div)`
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  margin: 30px;
 `
 
-const ImgContainer = styled.div`
- display: flex;
- flex-direction: column;
- align-items: center;
- justify-content: space-between;
- background: red;
- margin: 0 40px 0 40px ;
-
+const ImgContainer = styled(Container)`
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  box-shadow: 0 4px 8px 1px #9C9FA0;
 `
 
 const P = styled.p`
+  padding: 20px;
   display: flex;
+  align-items: center;
   justify-content: center;
   font-size: 25px;
   text-align: center;
 `
 
-const Text = styled(P)`
- background: lightgray;
- padding: 10px;
- border-radius: 6px;
- width: fit-content;
- margin: 0;
+const ColoredP = styled(P)`
+  background-color: #A6E7DC;
+  border-radius: 10px;
+  margin: 0 0 0 5px;
+`
+
+const H2 = styled.h2`
+  color: #5C068C;
+  border-bottom: 1px solid #3C02A3;
+  padding: 0 30px 10px 30px;
 `
 
 const ShowResult: FC<ResultPageProps> = ({result, image, onClickReset}) => {
 
-  return <Div>
+  return <div>
+    <Div>
+      <ImgContainer>
+        <H2>Original</H2>
+        <img src={`data:image/jpeg;base64,${image}`} alt="" width="200" height="200"/>
+      </ImgContainer>
+      <ImgContainer>
+        <H2>Heatmap</H2>
+        <img src={`data:image/jpeg;base64,${image}`} alt="" width="200" height="200"/>
+      </ImgContainer>
+    </Div>
     <Container>
-      <ImgContainer>
-        <img src={`data:image/jpeg;base64,${image}`} alt="" width="200" height="200"/>
-        <P>Original</P>
-      </ImgContainer>
-      <ImgContainer>
-        <img src={`data:image/jpeg;base64,${image}`} alt="" width="200" height="200"/>
-        <P>Heatmap</P>
-      </ImgContainer>
+      <P>The probability that this image has glaucoma is:<ColoredP>{(result*100).toFixed(3)}%</ColoredP></P>
+      <Button onClick={onClickReset} type="square" value="Accept"/>
     </Container>
-    <Text>Result: {result}</Text>
-    <Button onClick={onClickReset} type="square" value="Ok"/>
-  </Div>
+  </div>
+
 }
 
 export default ShowResult
