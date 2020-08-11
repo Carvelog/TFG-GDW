@@ -114,9 +114,7 @@ const Home = () => {
   return (
     <Div>
       <Title>Upload your retinal image to process it and get the diagnosis</Title>
-      <Text>By submitting data below, you are agreeing to our Terms of service and Privacy policy.
-      The ULL and this project are not responsible for the contents of your submission.
-      Learn more.</Text>
+      <Text>By submitting data below, the ULL and this project are not responsible for the contents of your submission.</Text>
       <Container>
         {data?
           <>
