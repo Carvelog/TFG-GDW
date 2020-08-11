@@ -22,7 +22,7 @@ const ModalContainer = styled(Div)`
 
 const Container = styled(Div)`
   width: 100%;
-  height: 102vh;
+  height: 130vh;
   background-color: rgba(0,0,0,0.6);
 `
 
