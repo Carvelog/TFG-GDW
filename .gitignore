@@ -4,7 +4,6 @@ static
 temp
 __pycache__
 .scripts
-public
 *.h5
 
 # dependencies
@@ -16,7 +15,7 @@ public
 /coverage
 
 # production
-/build
+build
 
 # misc
 .DS_Store
