@@ -15,6 +15,8 @@ __pycache__
 /coverage
 
 # production
+build/
+/build
 build
 
 # misc
