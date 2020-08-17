@@ -55,10 +55,6 @@ const ShowResult: FC<ResultPageProps> = ({result, image, onClickReset}) => {
         <H2>Original</H2>
         <img src={`data:image/jpeg;base64,${image}`} alt="" width="200" height="200"/>
       </ImgContainer>
-      <ImgContainer>
-        <H2>Heatmap</H2>
-        <img src={`data:image/jpeg;base64,${image}`} alt="" width="200" height="200"/>
-      </ImgContainer>
     </Div>
     <Container>
       <P>The probability that this image has glaucoma is:<ColoredP>{(result*100).toFixed(3)}%</ColoredP></P>
