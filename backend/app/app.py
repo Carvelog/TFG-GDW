@@ -18,7 +18,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 initializeDb(app)
 api = Api(app)
 CORS(app)
-print("model loaded!")
 load_model()
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
