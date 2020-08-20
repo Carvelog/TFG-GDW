@@ -42,7 +42,7 @@ export interface ImageData {
 const sendImageRequest = async (imageData: ImageData | undefined) => {
   return await axios({
     method: 'post',
-    url: 'http://localhost:8080/api/process',
+    url: 'http://medimag.iaas.ull.es:8080/api/process',
     data: imageData,
     headers: {
       'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ const getDiagnosisRequest = (imageID: string, setResult: any, setIsLoading: any)
   const intervalId = setInterval(async () => {
     await axios({
       method: 'get',
-      url: `http://localhost:8080/api/diagnosis/${imageID}`,
+      url: `http://medimag.iaas.ull.es:8080/api/diagnosis/${imageID}`,
     })
       .then((res) => {
         clearInterval(intervalId)
@@ -78,7 +78,7 @@ const getDiagnosisRequest = (imageID: string, setResult: any, setIsLoading: any)
 const getCropImage = async (imageId: string) => {
   return await axios({
     method: 'get',
-    url: `http://localhost:8080/api/download/${imageId}`,
+    url: `http://medimag.iaas.ull.es:8080/api/download/${imageId}`,
     headers: { }
   })
     .then(res => {
