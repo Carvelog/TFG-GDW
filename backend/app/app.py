@@ -7,7 +7,8 @@ from config import Config, ProductionConfig
 from database.db import initializeDb
 from nn.modelQueue import load_model, processImage
 
-app = Flask(__name__, static_folder="../frontend/build", static_url_path="/")
+app = Flask(__name__)
+load_model()
 
 app.config.from_object(ProductionConfig)
 app.config['MONGODB_SETTINGS'] = {
@@ -18,12 +19,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 initializeDb(app)
 api = Api(app)
 CORS(app)
-load_model()
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-@app.route('/')
-def index():
-  return app.send_static_file('index.html')
 
 api.add_resource(ok, '/api/ok')
 api.add_resource(process, '/api/process')
