@@ -36,7 +36,7 @@ from shutil import copyfile, rmtree
 
 import os
 
-WEIGHT_PATH = '/home/carlos/Documentos/TFG/ProyectoTFG/backend/app/nn/weights' 
+WEIGHT_PATH = '/usr/src/app/nn/weights'  # cambiar por os.path...
 
 BATCH_SIZE = 32
 INPUT_SIZE_BY_NETWORK = {
