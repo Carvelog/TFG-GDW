@@ -21,8 +21,9 @@ class downloadImage(Resource):
       imageDict = json.loads(image)
 
       croppedImage = cropImage(imageDict)
+      image = croppedImage.decode("utf-8")
 
-      return croppedImage.decode("utf-8") #TODO: return a json response
+      return Response(response={image}, status=200)
 
     return {'message':'Invalid method'}, 405
 
