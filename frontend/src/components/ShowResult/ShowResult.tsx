@@ -48,7 +48,6 @@ const H2 = styled.h2`
 `
 
 const ShowResult: FC<ResultPageProps> = ({result, image, onClickReset}) => {
-
   return <div>
     <Div>
       <ImgContainer>
