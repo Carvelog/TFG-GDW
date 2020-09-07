@@ -40,9 +40,9 @@ export const Header = () => {
   return <Container>
     <Img src={logo} alt="Ull logo" onClick={toHome}/>
     <Button value="Guide" onClick={toGuide} type='square'/>
-    <Button value="About" onClick={toAbout} type='square'/>
+    {/*<Button value="About" onClick={toAbout} type='square'/>*/}
     {currentLocation.pathname !== '/'?
-      <Button value="Upload" onClick={toHome} type='square'/>
+      <Button value="Home" onClick={toHome} type='square'/>
       :
       <div/>
     }

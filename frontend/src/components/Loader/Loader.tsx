@@ -14,8 +14,8 @@ const spin = keyframes`
 const Load = styled.div`
   position: relative;
   top: 0;
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background-color: #5C068C;
   transform-origin: 5px 15px;
@@ -29,18 +29,18 @@ const Load = styled.div`
 
   &::after {
     left: 10px;
-    top: 15px;
-    width: 10px;
-    height: 10px;
+    top: 5px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background-color: #5C068C;
   }
 
   &::before {
     left: -10px;
-    top: 15px;
-    width: 10px;
-    height: 10px;
+    top: 5px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background-color: #5C068C;
   }
