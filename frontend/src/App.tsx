@@ -5,14 +5,13 @@ import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import { Footer } from "./containers/Footer/Footer";
 import Guide from "./pages/Guide/Guide";
-import Form from "../src/components/Form/Form"
 
 const App = () => {
   return (
     <Router>
       <div>
         <Header/>
-        <Route exact path='/' component={Form}/>
+        <Route exact path='/' component={Home}/>
         <Route path='/about' component={About}/>
         <Route path='/guide' component={Guide}/>
         <Footer/>

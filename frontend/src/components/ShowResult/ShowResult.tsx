@@ -5,7 +5,6 @@ import styled from "@emotion/styled";
 interface ResultPageProps {
   result: number
   image: string
-  onClickReset: () => void
 }
 
 const Div = styled.div`
@@ -47,7 +46,7 @@ const H2 = styled.h2`
   padding: 0 30px 10px 30px;
 `
 
-const ShowResult: FC<ResultPageProps> = ({result, image, onClickReset}) => {
+const ShowResult: FC<ResultPageProps> = ({result, image}) => {
   return <div>
     <Div>
       <ImgContainer>
@@ -57,10 +56,8 @@ const ShowResult: FC<ResultPageProps> = ({result, image, onClickReset}) => {
     </Div>
     <Container>
       <P>The probability that this image has glaucoma is:<ColoredP>{(result*100).toFixed(3)}%</ColoredP></P>
-      <Button onClick={onClickReset} type="square" value="Accept"/>
     </Container>
   </div>
-
 }
 
 export default ShowResult

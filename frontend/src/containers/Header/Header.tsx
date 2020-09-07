@@ -42,7 +42,7 @@ export const Header = () => {
     <Button value="Guide" onClick={toGuide} type='square'/>
     {/*<Button value="About" onClick={toAbout} type='square'/>*/}
     {currentLocation.pathname !== '/'?
-      <Button value="Upload" onClick={toHome} type='square'/>
+      <Button value="Home" onClick={toHome} type='square'/>
       :
       <div/>
     }
