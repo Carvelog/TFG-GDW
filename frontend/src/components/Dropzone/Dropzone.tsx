@@ -17,13 +17,13 @@ const Div = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: #A6E7DC;
+  background: #ffffff;
   outline: none;
   margin-bottom: 15px;
   cursor: pointer;
 
   &:hover{
-    background: #8AE7DB;
+    background: #DFE2DF;
   }
 `
 
@@ -69,14 +69,14 @@ export const Dropzone: FC<DropzoneProps> = ({onChildUpload}) => {
   const onDragEnter = (e: any) => {
     e.preventDefault()
     // @ts-ignore
-    dropzoneDiv.current.style.backgroundColor = '#8AE7DB';
+    dropzoneDiv.current.style.backgroundColor = '#DFE2DF';
 
   }
 
   const onDragLeave = (e: any) => {
     e.preventDefault()
     // @ts-ignore
-    dropzoneDiv.current.style.backgroundColor = '#A6E7DC';
+    dropzoneDiv.current.style.backgroundColor = '#FFFFFF';
   }
 
   const onDragOver = (e: any) => {
@@ -85,7 +85,7 @@ export const Dropzone: FC<DropzoneProps> = ({onChildUpload}) => {
 
   const onDrop = (e: any) => {
     // @ts-ignore
-    dropzoneDiv.current.style.backgroundColor = '#A6E7DC';
+    dropzoneDiv.current.style.backgroundColor = '#FFFFFF';
     e.preventDefault();
 
     if (e.dataTransfer !== undefined) {
