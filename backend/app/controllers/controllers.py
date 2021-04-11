@@ -79,6 +79,6 @@ class saveMetadata(Resource):
     data = request.get_json()
     image = Image.objects.get(uuid=uuid).update(metadata=data)
     
-    return Response(response='ok', status=200) 
+    return 200 
 
 from config import Config

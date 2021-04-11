@@ -8,7 +8,7 @@ import Loader from "../../components/Loader/Loader";
 import DataForm from "../../components/Form/Form";
 
 const Div = styled.div`
-  min-height: 82vh;
+  min-height: 92vh;
 `
 
 const Container = styled.div`
@@ -57,7 +57,7 @@ const sendImageRequest = async (imageData: ImageData | undefined) => {
     })
 }
 
-const getDiagnosisRequest = (imageID: string, setResult: any, setIsLoading: any) => {
+const getDiagnosisRequest = (imageID: string, setResult: any, setIsLoading: any, setErrors: any) => {
   const intervalId = setInterval(async () => {
     await axios({
       method: 'get',
@@ -70,8 +70,7 @@ const getDiagnosisRequest = (imageID: string, setResult: any, setIsLoading: any)
       })
       .catch((err) => {
         clearInterval(intervalId)
-        console.log('err: ', err)
-      //  guardar el error en un setError para manejarlo
+        setErrors(err)
       })
   }, 1500)
 }
@@ -113,7 +112,7 @@ const Home = () => {
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
   const [ result, setResult ] = useState()
   const [ image, setImage ] = useState()
-  const [ metadata, setMetadata] = useState()
+  const [ errors, setErrors] = useState()
 
   const handleChildUpload = async (data: ImageData | undefined) => {
     setData(data)
@@ -123,11 +122,11 @@ const Home = () => {
     const imageID = await sendImageRequest(data)
     setImageUuid(imageID)
     setImage(await getCropImage(imageID))
-    getDiagnosisRequest(imageID, setResult, setIsLoading)
+    getDiagnosisRequest(imageID, setResult, setIsLoading, setErrors)
+    //manejar errores
   }
 
   const handleMetadataUpload = async (data: any) => {
-    setMetadata(data)
     await sendMetadata(ImageUuid, data)
   }
 
@@ -138,9 +137,6 @@ const Home = () => {
 
   return (
     <Div>
-      <Title>Upload your retinal image to process it and get the diagnosis</Title>
-      <Text>By submitting data below, the ULL, associates and this project are not responsible for the contents of your submission. In addition, the uploaded images will be stored in a database in order to train neural network models.</Text>
-      <Text>To have a more accurate prediction look at this&nbsp;<a href="http://localhost:3000/guide"> documentation</a></Text>
       <Container>
         {data?
           <>
@@ -154,7 +150,14 @@ const Home = () => {
               }
           </>
           :
-          <Dropzone onChildUpload={handleChildUpload}/>
+          <Div>
+            <Title>Upload your retinal image to process it and get the diagnosis</Title>
+            <Text>By submitting data below, the ULL, associates and this project are not responsible for the contents of your submission. In addition, the uploaded images will be stored in a database in order to train neural network models.</Text>
+            <Text>To have a more accurate prediction look at this&nbsp;<a href="http://localhost:3000/guide"> documentation</a></Text>
+            <Container>
+              <Dropzone onChildUpload={handleChildUpload}/>
+            </Container>
+          </Div>
         }
       </Container>
     </Div>

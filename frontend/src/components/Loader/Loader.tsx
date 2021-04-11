@@ -48,6 +48,8 @@ const Load = styled.div`
 
 const Container = styled.div`
   display: flex;
+  position: absolute;
+  top: 50%;
 `
 
 const H2 = styled.h2`
